@@ -16,7 +16,7 @@ test('exists', function(){
 });
 
 test('handles a url', function(){
-  window.opener.torii = true;
+  window.opener.__torii = true;
   var url = "http://authServer?code=123451235fw";
   var handler = new RedirectHandler(url);
 
@@ -53,7 +53,7 @@ test('posts a message', function(){
     postMessage: function(message, origin){
       equal(message, "__torii_message:"+url, "posts back the url");
     },
-    torii: true
+    __torii: true
   };
 
   Ember.run(function(){
