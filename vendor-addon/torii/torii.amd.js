@@ -1,6 +1,6 @@
 /**
  * Torii version: 0.1.3
- * Built: Sun Aug 24 2014 18:17:21 GMT-0400 (EDT)
+ * Built: Tue Aug 26 2014 13:14:43 GMT-0400 (EDT)
  */
 define("torii/adapters/application", 
   ["exports"],
@@ -117,10 +117,15 @@ define("torii/configuration",
     // inconsistent behavior with IE. enable location polling as fallback
     // https://github.com/Vestorly/torii/issues/63
     function supportLocationPolling() {
-      var userAgent = window.navigator.userAgent,
-          isIE = userAgent.indexOf('MSIE') > -1 || userAgent.indexOf('Trident/') > -1;
-      return configuration.supportLocationPolling || isIE;
+      var userAgent = window.navigator.userAgent;
+        if ('undefined' !== typeof configuration.supportLocationPolling) {
+          return configuration.supportLocationPolling;
+        } else {
+          return userAgent.indexOf('MSIE') > -1 || userAgent.indexOf('Trident/') > -1;
+        }
     }
+
+
 
     __exports__.configurable = configurable;
     __exports__.supportLocationPolling = supportLocationPolling;
@@ -1177,7 +1182,7 @@ define("torii/services/popup",
     });
 
     if (supportLocationPolling()) {
-      Popup.reopenClass({
+      Popup.reopen({
         schedulePolling: function() {
           this.polling = Ember.run.later(this, function(){
             this.pollPopup();
